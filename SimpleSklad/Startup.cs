@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using SimpleSklad.Models;
 using SimpleSklad.Services;
 
 namespace SimpleSklad
@@ -31,20 +30,10 @@ namespace SimpleSklad
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // https://ardalis.com/aspnet-core-inmemorydatabase-upgrade-breaking-change
-            string dbName = Guid.NewGuid().ToString();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase(dbName));
-            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddMvc();
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
