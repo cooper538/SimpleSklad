@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using SimpleSklad.Models;
 using SimpleSklad.Services;
+using System;
+using System.IO;
 
 namespace SimpleSklad
 {
@@ -40,6 +37,10 @@ namespace SimpleSklad
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddMvc();
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,6 +64,8 @@ namespace SimpleSklad
                     RequestPath = new PathString("/vendor")
                 });
             }
+
+            app.UseAuthentication();
 
             app.UseMvcWithDefaultRoute();
         }
