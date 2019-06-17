@@ -44,7 +44,7 @@ namespace SimpleSklad
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +66,10 @@ namespace SimpleSklad
             }
 
             app.UseAuthentication();
+
+            // needed to data seed with OnModelCreating(ModelBuilder modelBuilder) 
+            dbContext.Database.EnsureCreated(); 
+            ApplicationDbInitializer.SeedUsers(userManager);
 
             app.UseMvcWithDefaultRoute();
         }

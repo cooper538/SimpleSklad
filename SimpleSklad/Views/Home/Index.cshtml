@@ -3,5 +3,12 @@
     ViewData["Title"] = "Index";
 }
 
+@inject UserManager<ApplicationUser> UserManager
+
 <h1>Index</h1>
+
+@foreach (var user in UserManager.Users.ToList())
+{
+    @Html.Raw(user.Email + "<br />")
+}
 
