@@ -107,8 +107,8 @@ namespace IdentitySample.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                    _f.FlashSuccess("A confirmation email has been sent to your email address");
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    _f.FlashInfo("A confirmation email has been sent to your email address.");
+                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);
@@ -239,7 +239,12 @@ namespace IdentitySample.Controllers
                 return View("Error");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (result.Succeeded)
+            {
+                _f.FlashSuccess("Your email address was confirmed.");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            return View("Error");
         }
 
         ////
