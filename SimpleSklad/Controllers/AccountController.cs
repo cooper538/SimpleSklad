@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using SimpleSklad.Controllers;
 using SimpleSklad.Models;
+using SimpleSklad.Services;
 using SimpleSklad.ViewModels.Account;
 using System.Threading.Tasks;
 
@@ -15,15 +16,18 @@ namespace IdentitySample.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IFlasherExtended _f;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IFlasherExtended f)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _f = f;
         }
 
         //
@@ -103,6 +107,7 @@ namespace IdentitySample.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    _f.FlashSuccess("A confirmation email has been sent to your email address");
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToLocal(returnUrl);
                 }
