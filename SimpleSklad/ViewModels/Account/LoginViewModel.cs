@@ -5,7 +5,6 @@ namespace SimpleSklad.ViewModels.Account
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
         public string UserName { get; set; }
 
         [Required]

@@ -38,7 +38,10 @@ namespace SimpleSklad
 
             services.AddMvc();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
         }
@@ -68,7 +71,7 @@ namespace SimpleSklad
             app.UseAuthentication();
 
             // needed to data seed with OnModelCreating(ModelBuilder modelBuilder) 
-            dbContext.Database.EnsureCreated(); 
+            dbContext.Database.EnsureCreated();
             ApplicationDbInitializer.SeedUsers(userManager);
 
             app.UseMvcWithDefaultRoute();
