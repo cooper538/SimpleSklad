@@ -30,10 +30,10 @@ namespace SimpleSklad
         public void ConfigureServices(IServiceCollection services)
         {
             // https://ardalis.com/aspnet-core-inmemorydatabase-upgrade-breaking-change
-            string dbName = Guid.NewGuid().ToString();
+            //string dbName = Guid.NewGuid().ToString();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase(dbName));
-            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));+
+                //options.UseInMemoryDatabase(dbName));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
